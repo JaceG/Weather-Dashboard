@@ -72,7 +72,7 @@ class WeatherService {
   private async fetchAndDestructureLocationData() {
     const geoCodeQuery = this.buildGeocodeQuery();
     const locationData = await this.fetchLocationData(geoCodeQuery);
-    const coordinates = this.destructureLocationData(locationData);
+    const coordinates = this.destructureLocationData(locationData[0]);
     return coordinates;
   }
 
@@ -81,7 +81,9 @@ class WeatherService {
     const weatherQuery = this.buildWeatherQuery(coordinates);
     const response = await fetch(weatherQuery);
     const weatherData = await response.json();
-    return weatherData;
+    const currentWeather = this.parseCurrentWeather(weatherData.list[0]);
+    const forecast = this.buildForecastArray(currentWeather, weatherData.list);
+    return forecast;
   }
 
   // TODO: Build parseCurrentWeather method
@@ -110,6 +112,7 @@ class WeatherService {
       const weather = new Weather(this.cityName, date, icon, temperature, wind, humidity);
       forecast.push(weather);
     }
+    return forecast;
   }
 
   // TODO: Complete getWeatherForCity method
@@ -117,11 +120,15 @@ class WeatherService {
     try{
       this.cityName = city;
       const coordinates = await this.fetchAndDestructureLocationData();
-      const weatherData = await this.fetchWeatherData(coordinates);
-      const currentWeather = this.parseCurrentWeather(weatherData);
-      const forecast = this.buildForecastArray(currentWeather, weatherData);
-      return forecast;
-    }catch(err){}
+      if(coordinates){
+        const weather= await this.fetchWeatherData(coordinates);
+        return weather;
+      }
+      throw new Error('No coordinates found');
+    }catch(err){
+      console.log(err);
+      throw err;
+    }
   }
 }
 

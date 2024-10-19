@@ -10,6 +10,7 @@ router.post('/', (req: Request, res: Response) => {
   try{
     const { cityName } = req.body;
     WeatherService.getWeatherForCity(cityName).then((forecast) => {
+      console.log(forecast);
       res.status(200).json(forecast);
     })
   }catch(err){}
