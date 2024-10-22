@@ -64,7 +64,7 @@ class WeatherService {
   // TODO: Create buildWeatherQuery method
   private buildWeatherQuery(coordinates: Coordinates): string {
     const { lat, lon } = coordinates;
-    const weatherQuery =  `${this.baseURL}/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${this.apiKey}`;
+    const weatherQuery =  `${this.baseURL}/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${this.apiKey}&units=imperial`;
     return weatherQuery;
   }
 
@@ -81,8 +81,17 @@ class WeatherService {
     const weatherQuery = this.buildWeatherQuery(coordinates);
     const response = await fetch(weatherQuery);
     const weatherData = await response.json();
+    console.log(weatherData);
     const currentWeather = this.parseCurrentWeather(weatherData.list[0]);
     const forecast = this.buildForecastArray(currentWeather, weatherData.list);
+    console.log(forecast)
+    for (let i = 0; i <= forecast.length; i++) {
+      // Access each day of the forecast temperature
+      // Take that forecast temperature and subtract 298 from it
+      // Set that new ferinheit to the new forecast temperature
+      
+    }
+    console.log(forecast)
     return forecast;
   }
 
@@ -122,6 +131,7 @@ class WeatherService {
       const coordinates = await this.fetchAndDestructureLocationData();
       if(coordinates){
         const weather= await this.fetchWeatherData(coordinates);
+        console.log(weather);
         return weather;
       }
       throw new Error('No coordinates found');
