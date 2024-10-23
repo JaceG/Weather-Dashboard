@@ -13,7 +13,7 @@ The Weather Dashboard is a web application that allows users to view current and
 - [Credits](#credits)
 
 ## Usage
-To use this application, simply run 'npm start' and follow/answer the prompts.
+To use this application, simply goto https://weather-dashboard-g7bd.onrender.com/
 
 ## Contributing
 
