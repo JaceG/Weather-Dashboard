@@ -37,7 +37,6 @@ class WeatherService {
     this.baseURL = process.env.API_BASE_URL || "";
     this.apiKey = process.env.API_KEY || "";
 
-    // Check if the API key and base URL are present
     if (!this.apiKey) {
       throw new Error("API key is missing");
     }
@@ -89,7 +88,6 @@ class WeatherService {
     const geoCodeQuery = this.buildGeocodeQuery();
     const locationData = await this.fetchLocationData(geoCodeQuery);
 
-    // Check if locationData exists and is an array
     if (!locationData || !Array.isArray(locationData) || locationData.length === 0) {
       throw new Error("No location data found");
     }
@@ -122,50 +120,50 @@ class WeatherService {
   }
 
   // TODO: Build parseCurrentWeather method
-private parseCurrentWeather(response: any) {
-  const date = dayjs.unix(response.dt).format('MM/DD/YYYY');
-  
-  let icon = response.weather[0].icon;
-  if (icon.endsWith('n')) {
-    icon = icon.replace('n', 'd');
-  }
-
-  const temperature = response.main.temp;
-  const wind = response.wind.speed;
-  const humidity = response.main.humidity;
-
-  const currentWeather = new Weather(this.cityName, date, icon, temperature, wind, humidity);
-  return currentWeather;
-}
-
-
-  // TODO: Complete buildForecastArray method
-private buildForecastArray(currentWeather: Weather, weatherData: any[]) {
-  const forecast = [currentWeather];
-  
-  const filteredWeatherData = weatherData.filter((data: any) => {
-    return data.dt_txt.includes('12:00:00');
-  });
-
-  for (const day of filteredWeatherData) {
-    const date = dayjs.unix(day.dt).format('MM/DD/YYYY');
+  private parseCurrentWeather(response: any) {
+    const date = dayjs.unix(response.dt).format('MM/DD/YYYY');
     
-    let icon = day.weather[0].icon;
+    // Convert nighttime icons to daytime icons
+    let icon = response.weather[0].icon;
     if (icon.endsWith('n')) {
       icon = icon.replace('n', 'd');
     }
 
-    const temperature = day.main.temp;
-    const wind = day.wind.speed;
-    const humidity = day.main.humidity;
-    const weather = new Weather(this.cityName, date, icon, temperature, wind, humidity);
+    const temperature = response.main.temp;
+    const wind = response.wind.speed;
+    const humidity = response.main.humidity;
 
-    forecast.push(weather);
+    const currentWeather = new Weather(this.cityName, date, icon, temperature, wind, humidity);
+    return currentWeather;
   }
 
-  return forecast;
-}
+  // TODO: Complete buildForecastArray method
+  private buildForecastArray(currentWeather: Weather, weatherData: any[]) {
+    const forecast = [currentWeather];
+    
+    const filteredWeatherData = weatherData.filter((data: any) => {
+      return data.dt_txt.includes('12:00:00');
+    });
 
+    for (const day of filteredWeatherData) {
+      const date = dayjs.unix(day.dt).format('MM/DD/YYYY');
+      
+      // Convert nighttime icons to daytime icons
+      let icon = day.weather[0].icon;
+      if (icon.endsWith('n')) {
+        icon = icon.replace('n', 'd');
+      }
+
+      const temperature = day.main.temp;
+      const wind = day.wind.speed;
+      const humidity = day.main.humidity;
+      const weather = new Weather(this.cityName, date, icon, temperature, wind, humidity);
+
+      forecast.push(weather);
+    }
+
+    return forecast;
+  }
 
   // TODO: Complete getWeatherForCity method
   async getWeatherForCity(city: string) {
