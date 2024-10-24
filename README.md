@@ -16,7 +16,7 @@ The Weather Dashboard is a web application that allows users to view current and
 To use this application, simply goto https://weather-dashboard-g7bd.onrender.com/
 
 ## Contributing
-
+Contributions are welcome. Please submit a pull request or open an issue for any feature requests or bugs.
 
 ## Tests
 To run tests, use the following command: npm start
