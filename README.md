@@ -18,9 +18,17 @@ The Weather Dashboard is a web application that allows users to view current and
 
 To use this application, simply goto https://weather-dashboard-g7bd.onrender.com/
 
+Double check that city name is spelled correctly as it will throw an error if it is not, an example of this error is in the second screenshot.
+
+Some cities require states as well to specify when there are multiple cities with the same name around the world. Such as "Columbus, OH."
+
 ## Screenshot
 
 ![Screenshot](Assets/Screenshot.png)
+
+---
+
+![Screenshot](Assets/Screenshot%202.png)
 
 ## Contributing
 
